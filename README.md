@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+Express helps serve Single Page Applications and ease of building RESTful APIs.
+
 - [ ] Describe Middleware?
+
+Middleware is the use of code to interact with the initial data sequentially before the final code block.
 
 - [ ] Describe a Resource?
 
+A Resource is data.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+The API can return JSON with the status code between 200-299 to show the request was generally successful.
+
 - [ ] How can we partition our application into sub-applications?
+
+Through sectioning of code we can partition our application into sub-applications with much more easily read code.
 
 ## Project Setup
 
