@@ -27,7 +27,6 @@ async function validateProjID(req, res, next) {
   }
 }
 
-// GET PROJECT
 router.get('/', async (req, res) => {
   try {
     const projectInfo = await projectDb.get();
@@ -44,7 +43,6 @@ router.get('/', async (req, res) => {
   }
 })
 
-// GET PROJECT BY ID
 router.get('/:id', validateProjID, async (req, res) => {
   try {
     const {id} = req.params;
@@ -63,10 +61,16 @@ router.get('/:id', validateProjID, async (req, res) => {
   }
 })
 
-// GET PROJECT ACTIONS
-router.get('/:id', async (req, res) => {
+router.get('/:id/actions', validateProjID, async (req, res) => {
   try {
+    const {id} = req.params;
 
+    const projectActions = await projectDb.getProjectActions(id);
+
+    res.status(200).json({
+      success: true,
+      actions: projectActions
+    })
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -75,9 +79,23 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
+    const project = req.body;
 
+    if (project.name && project.description) {
+      const projectAdd = await projectDb.insert(project);
+
+      res.status(201).json({
+        success: true,
+        project: projectAdd
+      })
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Required fields not found"
+      })
+    }
   } catch (err) {
     res.status(500).json({
       success: false,
