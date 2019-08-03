@@ -27,7 +27,7 @@ async function validateID(req, res, next) {
   }
 }
 
-
+// ROUTES
 router.get('/', async (req, res) => {
   try {
     const actionsInfo = await actionDb.get();
@@ -51,7 +51,6 @@ router.get('/:id', validateID, async (req, res) => {
   })
 })
 
-// IN PROGRESS
 router.post('/', async (req, res) => {
   try {
     const action = req.body;
@@ -71,7 +70,7 @@ router.post('/', async (req, res) => {
       } else {
         res.status(400).json({
           success: false,
-          message: "Please include all required fields"
+          message: "Required fields not found"
         })
       }
     } else {
@@ -107,7 +106,7 @@ router.put('/:id', validateID, async (req, res) => {
 router.delete('/:id', validateID, async (req, res) => {
   try {
     const {id} = req.params;
-    
+
     const actionInfo = await actionDb.remove(id);
 
     res.status(200).json({

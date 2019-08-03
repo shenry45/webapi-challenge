@@ -104,9 +104,17 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.put('/:id', validateProjID, (req, res) => {
+router.put('/:id', validateProjID, async (req, res) => {
   try {
+    const project = req.body;
+    const {id} = req.params;
 
+    const projectEdit = await projectDb.update(id, project);
+
+    res.status(200).json({
+      success: true,
+      project: projectEdit
+    })
   } catch (err) {
     res.status(500).json({
       success: false,
