@@ -27,6 +27,7 @@ async function validateProjID(req, res, next) {
   }
 }
 
+// ROUTES
 router.get('/', async (req, res) => {
   try {
     const projectInfo = await projectDb.get();
@@ -65,11 +66,11 @@ router.get('/:id/actions', validateProjID, async (req, res) => {
   try {
     const {id} = req.params;
 
-    const projectActions = await projectDb.getProjectActions(id);
+    const projectInfo = await projectDb.getProjectActions(id);
 
     res.status(200).json({
       success: true,
-      actions: projectActions
+      actions: projectInfo
     })
   } catch (err) {
     res.status(500).json({
@@ -84,16 +85,16 @@ router.post('/', async (req, res) => {
     const project = req.body;
 
     if (project.name && project.description) {
-      const projectAdd = await projectDb.insert(project);
+      const projectInfo = await projectDb.insert(project);
 
       res.status(201).json({
         success: true,
-        project: projectAdd
+        project: projectInfo
       })
     } else {
       res.status(400).json({
         success: false,
-        message: "Required fields not found"
+        message: "All required fields not found"
       })
     }
   } catch (err) {
@@ -109,11 +110,11 @@ router.put('/:id', validateProjID, async (req, res) => {
     const project = req.body;
     const {id} = req.params;
 
-    const projectEdit = await projectDb.update(id, project);
+    const projectInfo = await projectDb.update(id, project);
 
     res.status(200).json({
       success: true,
-      project: projectEdit
+      project: projectInfo
     })
   } catch (err) {
     res.status(500).json({
@@ -130,7 +131,7 @@ router.delete('/:id', validateProjID, async (req, res) => {
     const projectInfo =  await projectDb.remove(id);
 
     res.status(200).json({
-      success: false,
+      success: true,
       project: projectInfo
     })
   } catch (err) {

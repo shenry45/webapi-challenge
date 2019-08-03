@@ -45,17 +45,27 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', validateID, async (req, res) => {
-  res.status(200).json({
-    success: true,
-    action: validateID
-  })
+  try {
+    const {id} = req.params;
+
+    const actionInfo = await actionDb.get(id);
+
+    res.status(200).json({
+      success: true,
+      action: actionInfo
+    })
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    })
+  }
 })
 
 router.post('/', async (req, res) => {
   try {
     const action = req.body;
     const projID = req.body.project_id;
-
 
     const validateProj = await projectDb.get(projID);
 
@@ -70,7 +80,7 @@ router.post('/', async (req, res) => {
       } else {
         res.status(400).json({
           success: false,
-          message: "Required fields not found"
+          message: "All required fields not found"
         })
       }
     } else {
@@ -89,7 +99,10 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', validateID, async (req, res) => {
   try {
-    const actionInfo = await actionDb.update(id, changes);
+    const action = req.body;
+    const {id} = req.params;
+
+    const actionInfo = await actionDb.update(id, action);
 
     res.status(200).json({
       success: true,
